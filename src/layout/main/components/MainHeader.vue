@@ -1,5 +1,5 @@
 <template>
-   <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+   <nav class="main-header">
       <ul class="navbar-nav ml-auto main-header__my-office">
          <!-- My Office -->
          <li class="nav-item main-header__my-office">
