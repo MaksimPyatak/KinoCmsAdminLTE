@@ -4,6 +4,9 @@
       <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus porro cum amet itaque necessitatibus dolore
          animi labore laboriosam error, voluptatum consectetur nisi eligendi tempore consequatur quam nesciunt autem quia
          saepe.</p>
+      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus porro cum amet itaque necessitatibus dolore
+         animi labore laboriosam error, voluptatum consectetur nisi eligendi tempore consequatur quam nesciunt autem quia
+         saepe.</p>
       <RouterLink to="/about-cinema">Abou Cinema Page</RouterLink>
       <!--<p v-for="country in countries" :key="country.name">
          Country: {{ country.name }}<br>

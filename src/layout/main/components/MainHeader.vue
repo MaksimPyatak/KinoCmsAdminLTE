@@ -1,21 +1,6 @@
 <template>
    <nav class="main-header">
-      <ul class="navbar-nav ml-auto main-header__my-office">
-         <!-- My Office -->
-         <li class="nav-item main-header__my-office">
-            <a class="nav-link main-header__avatar-link" data-toggle="dropdown" href="#">
-               <img class="main-header__avatar" src="../img/avatar.svg" alt="">
-               <h3>Адміністратор</h3>
-            </a>
 
-         </li>
-         <!-- Exit -->
-         <li class="nav-item main-header__exit">
-            <a class="nav-link" data-toggle="dropdown" href="#">
-               <img class="main-header__avatar" src="../img/exit.svg" alt="">
-            </a>
-         </li>
-      </ul>
    </nav>
 </template>
 
@@ -25,6 +10,8 @@
 
 <style lang="scss" scoped>
 .main-header {
+   height: 35px;
+
    &__my-office {
       height: 35px;
    }
