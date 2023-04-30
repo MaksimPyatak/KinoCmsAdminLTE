@@ -1,7 +1,7 @@
 <template>
-   <li class="nav-item has-treeview ">
+   <li class="nav-item">
       <RouterLink :to="link" class="nav-link" :class="{ active: isActive() }">
-         <i class="nav-icon fas" :class="icon"></i>
+         <i class="nav-icon " :class="icon"></i>
          <p>
             <slot />
          </p>
