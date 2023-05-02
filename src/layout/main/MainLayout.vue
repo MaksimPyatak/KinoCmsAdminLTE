@@ -3,6 +3,7 @@
       <MainHeader />
       <MainSidebar />
       <div class="content-wrapper">
+
          <slot />
       </div>
    </div>
@@ -15,7 +16,7 @@ import 'admin-lte'
 </script>
 
 <style lang="scss" scoped>
-.layout {
-   background-color: darkseagreen;
+.content-wrapper {
+   padding: 20px;
 }
 </style>
