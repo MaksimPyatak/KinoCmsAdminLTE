@@ -14,9 +14,9 @@
          <slot name="body"></slot>
       </div>
       <!-- /.card-body -->
-      <!--<div class="card-footer">
+      <div class="card-footer">
          The footer of the card
-      </div>-->
+      </div>
       <!-- /.card-footer -->
    </div>
    <!-- /.card -->
