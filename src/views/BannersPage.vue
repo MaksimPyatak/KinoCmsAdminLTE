@@ -12,7 +12,9 @@
       <template #body>
 
          <div class="banner__main-block">
-            <ImageCard ratio="19%" @updat-url="test" @updateText="test">
+            <!--<img v-for="item in dataForDoun" :src="item.image" :key="item.id" alt="">-->
+            <ImageCard v-for="item in dataForDoun" :img="item.image" :id="item.id" :key="item.id" ratio="19%"
+               @updatUrl="updatUrl" @updateText="updateText">
                <!--:img=""-->
             </ImageCard>
             <FileUpload @uploadedFiles="handleFileUpload" />
@@ -30,16 +32,43 @@ import FileUpload from "../components/FileUpload.vue";
 
 const showingBlock = ref(true)
 
-function test(params) {
-   console.log(params);
+function updatUrl(id, value) {
+   console.log(value);
+   for (const item of dataForDoun.value) {
+      if (item.id == id) {
+         item.url = value;
+         console.log(item);
+      }
+   }
 }
+function updateText(id, value) {
+   console.log(value);
+   for (const item of dataForDoun.value) {
+      if (item.id == id) {
+         item.text = value;
+         console.log(item);
+      }
+   }
+}
+
 function changeShowingBlock(value) {
    showingBlock.value = value;
 }
 
 const handleFileUpload = async (files) => {
-   console.log("selected file", files);
+   for (const item of files) {
+      let id = Date.now() + Math.random().toString(36).substring(10);
+      let objItem = {
+         id: id,
+         image: URL.createObjectURL(item), //item
+         url: '',
+         text: ''
+      }
+      dataForDoun.value.push(objItem)
+   }
 }
+
+const dataForDoun = ref([]);
 
 </script>
 

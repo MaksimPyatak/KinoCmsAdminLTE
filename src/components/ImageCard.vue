@@ -18,6 +18,7 @@ import { ref, watch } from "vue";
 import CastomInput from '../components/CastomInput.vue';
 
 const props = defineProps({
+   id: String,
    img: String,
    ratio: String,
 })
@@ -28,7 +29,7 @@ const valueUrl = ref('')
 const valueText = ref('')
 watch(valueUrl, (newValue) => {
    console.log(newValue);
-   emit('updatUrl', newValue)
+   emit('updatUrl', props.id, newValue)
 })
 
 watch(valueText, (newValue) => {
