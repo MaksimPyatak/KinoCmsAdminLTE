@@ -23,7 +23,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { collection, addDoc, doc, setDoc, updateDoc, getDoc, getDocs, query, where } from "firebase/firestore"
-import db from '../../firebase/init.js'
+import db from '../firebase/index.js'
 import LayoutFrame from "@/features/layout-frame/LayoutFrame.vue";
 
 async function createUser() {
@@ -86,12 +86,13 @@ async function getUsers() {
 }
 
 onMounted(() => {
+   console.log('log');
    //createUser();
-   //createCountry();
-   //addCountryCapital();
+   createCountry();
+   addCountryCapital();
    //updateCountry();
    //getCountry();
-   //getCountries();
+   getCountries();
    getUsers();
 })
 

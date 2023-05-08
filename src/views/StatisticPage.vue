@@ -8,10 +8,10 @@
          animi labore laboriosam error, voluptatum consectetur nisi eligendi tempore consequatur quam nesciunt autem quia
          saepe.</p>
       <RouterLink to="/about-cinema">Abou Cinema Page</RouterLink>
-      <!--<p v-for="country in countries" :key="country.name">
+      <p v-for="country in countries" :key="country.name">
          Country: {{ country.name }}<br>
          Capital: {{ country.capital }}
-      </p>-->
+      </p>
       <p v-for="user in users" :key="user.firstName">
          {{ user.firstName }} {{ user.lastName }}
       </p>
@@ -24,6 +24,26 @@ import { RouterLink, RouterView } from 'vue-router'
 import { collection, addDoc, doc, setDoc, updateDoc, getDoc, getDocs, query, where } from "firebase/firestore"
 import { db } from '../firebase/index.js'
 
+
+async function createCountry() {
+   await setDoc(doc(db, 'countries', 'US'), {
+      name: 'United States'
+   })
+}
+
+async function addCountryCapital() {
+   await setDoc(doc(db, 'countries', 'US'), {
+      capital: 'Washington'
+   }, { merge: true })
+}
+
+const countries = ref([])
+async function getCountries() {
+   const querySnap = await getDocs(query(collection(db, 'countries')));
+   querySnap.forEach((doc) => {
+      countries.value.push(doc.data())
+   })
+}
 
 const users = ref([]);
 async function getUsers() {
@@ -38,11 +58,11 @@ async function getUsers() {
 
 onMounted(() => {
    //createUser();
-   //createCountry();
-   //addCountryCapital();
+   createCountry();
+   addCountryCapital();
    //updateCountry();
    //getCountry();
-   //getCountries();
+   getCountries();
    getUsers();
 })
 

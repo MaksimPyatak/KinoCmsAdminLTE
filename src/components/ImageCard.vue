@@ -3,7 +3,7 @@
       <div class="card__body">
          <div class="card__img-box">
             <div class="card__img">
-               <img :src="props.img" />
+               <img :src="imgSrc" />
             </div>
          </div>
          <CastomInput v-model="valueUrl" class="card__input-box" name="url" type="url" label="URL:" placeholder="URL" />
@@ -19,22 +19,20 @@ import CastomInput from '../components/CastomInput.vue';
 
 const props = defineProps({
    id: String,
-   img: String,
+   img: File,
    ratio: String,
 })
 
-const emit = defineEmits(['updatUrl', 'updatText']);
-
+const emit = defineEmits(['updatUrl', 'updateText']);
+const imgSrc = URL.createObjectURL(props.img)
 const valueUrl = ref('')
 const valueText = ref('')
 watch(valueUrl, (newValue) => {
-   console.log(newValue);
    emit('updatUrl', props.id, newValue)
 })
 
 watch(valueText, (newValue) => {
-   console.log(newValue);
-   emit('updatText', newValue)
+   emit('updateText', props.id, newValue)
 })
 
 </script>
