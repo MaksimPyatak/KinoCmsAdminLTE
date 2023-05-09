@@ -21,16 +21,11 @@
          </div>
       </template>
       <template #footer>
-         <div class="banner__slider-speed">
-            <label for="select" class="banner__label-select">Швидкість обертання</label>
-            <select class="banner__select" name="select" v-model="sliderSpeed">
-               <option value="5" selected>5</option>
-               <option value="10">10</option>
-               <option value="15">15</option>
-            </select>
-         </div>
+         <CastomSelect v-model="topSliderSpeed" :selectText="topSelectText">
+            Швидкість обертання
+         </CastomSelect>
          <div class="banner__saving-button-box">
-            <div class="banner__saving-button" @click="saveData">
+            <div class="banner__saving-button" @click="saveNewData(dataForUpload, 'topBanner')">
                <span>Зберегти</span>
             </div>
          </div>
@@ -44,50 +39,18 @@ import { collection, addDoc, doc, setDoc, updateDoc, getDoc, getDocs, query, whe
 import GeneralCard from '../components/GeneralCard.vue';
 import ToggleCheckbox from '../components/ToggleCheckbox.vue';
 import ImageCard from '../components/ImageCard.vue'
+import CastomSelect from '../components/CastomSelect.vue'
 import FileUpload from "../components/FileUpload.vue";
-import { db, uploadFile } from '../firebase/index.js'
-import { getOrigId } from "../helpers/getOrigId.js";
-import { addDataToFirebase } from "../helpers/addDataToFirebase.js";
+import { db, uploadFile, saveNewData } from '../firebase/index.js'
+import { getOrigId, updatObjectValue } from "../helpers/dataHandler.js";
 
-
-async function createData(id, name, value) {
-   await setDoc(doc(db, 'topBanner', id), {
-      [name]: value
-   })
-}
-
-
-async function saveData() {
-   console.log(dataForUpload.value);
-   for await (const item of dataForUpload.value) {
-      const { downloadUrl, metadata, snapshort } = await uploadFile(item.image);
-      addDataToFirebase(item.id, 'topBanner', 'downloadUrl', downloadUrl, false);
-      console.log(downloadUrl);
-      for (const key in item) {
-         if (Object.hasOwnProperty.call(item, key)) {
-            if (key != "id" & key != "image") {
-               addDataToFirebase(item.id, 'topBanner', key, item[key], true)
-            }
-
-         }
-      }
-   }
-}
 const showingBlock = ref(true)
 
 function updatUrl(id, value) {
-   for (const item of dataForUpload.value) {
-      if (item.id == id) {
-         item.url = value;
-      }
-   }
+   updatObjectValue(dataForUpload.value, id, 'url', value)
 }
 function updateText(id, value) {
-   for (const item of dataForUpload.value) {
-      if (item.id == id) {
-         item.text = value;
-      }
-   }
+   updatObjectValue(dataForUpload.value, id, 'text', value)
 }
 
 function changeShowingBlock(value) {
@@ -96,7 +59,7 @@ function changeShowingBlock(value) {
 
 const dataForUpload = ref([]);
 /*
-
+* Зберігає 
 **/
 function handleFileUpload(files) {
    for (const item of files) {
@@ -107,8 +70,8 @@ function handleFileUpload(files) {
       dataForUpload.value.push(objItem)
    }
 }
-
-const sliderSpeed = ref('5')
+const topSelectText = [5, 10, 15]
+const topSliderSpeed = ref('5')
 </script>
 
 <style lang="scss" scoped>
@@ -134,6 +97,7 @@ const sliderSpeed = ref('5')
       font-size: 22px;
    }
 
+   //!!!!!!?????
    &__label-select {
       margin-right: 10px;
    }
