@@ -1,7 +1,7 @@
 <template>
    <div class="file-upload">
       <label>
-         <input class="input-file" ref="file" v-on:change="handleFileUpload()" type="file" multiple>
+         <input class="input-file" ref="file" v-on:change="handleFileUpload()" type="file" :multiple="props.multiple">
          <span>Додати файл</span>
       </label>
    </div>
@@ -11,6 +11,9 @@
 import { ref } from "vue"
 
 const file = ref(null)
+const props = defineProps({
+   multiple: Boolean,
+})
 const emit = defineEmits(['uploadedFiles'])
 const handleFileUpload = async () => {
    emit("uploadedFiles", file.value.files);

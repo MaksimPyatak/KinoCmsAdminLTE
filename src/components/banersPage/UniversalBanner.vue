@@ -1,8 +1,4 @@
 <template>
-   <div class="banner">
-      <h1>Banner</h1>
-   </div>
-   <ZeroModal v-if="loading" />
    <GeneralCard>
       <template #title>
          На головній верх
@@ -31,21 +27,19 @@
          </div>
       </template>
    </GeneralCard>
-   <ThroughBanner />
 </template>
 
 <script setup>
 import { ref, onMounted } from "vue";
 import { collection, getDocs, } from "firebase/firestore";
+import { db, saveNewData, addDataToFirebase } from '../firebase/index.js';
+import { getOrigId, updatObjectValue, delCard } from "../helpers/dataHandler.js";
 import GeneralCard from '../components/GeneralCard.vue';
-import ThroughBanner from '../components/banersPage/ThroughBanner.vue'
 import ToggleCheckbox from '../components/ToggleCheckbox.vue';
 import ImageCard from '../components/ImageCard.vue';
 import CastomSelect from '../components/CastomSelect.vue';
 import FileUpload from "../components/FileUpload.vue";
-import { db, saveNewData, addDataToFirebase } from '../firebase/index.js';
-import { getOrigId, updatObjectValue, delCard } from "../helpers/dataHandler.js";
-import ZeroModal from '../components/ZeroModal.vue'
+
 
 const showingBlock = ref(true)
 const loading = ref(false)
@@ -122,41 +116,7 @@ function delTopCard(id, fullPath) {
 }
 const topSelectText = [5, 10, 15]
 const topSliderSpeed = ref('5')
+
 </script>
 
-<style lang="scss" scoped>
-.banner {
-   &__main-block {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-
-      div {
-         margin-right: 20px;
-      }
-   }
-
-   &__saving-button {
-      width: 250px;
-      height: 45px;
-      background: #007bff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 22px;
-      cursor: pointer;
-   }
-
-   //!!!!!!?????
-   &__label-select {
-      margin-right: 10px;
-   }
-}
-
-:deep(.card-footer) {
-   display: flex;
-   justify-content: space-between;
-   align-items: center;
-}
-</style>
+<style lang="scss" scoped></style>

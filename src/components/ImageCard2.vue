@@ -1,10 +1,10 @@
 <template>
    <div class="card">
       <div class="card__body">
-         <ClosingCard class="card__close" @click="$emit('close', props.id, props.fullPath)" />
+         <ClosingCard class="card__close" @click="$emit('close')" />
          <div class="card__img-box">
             <div class="card__img">
-               <img :src="props.src" />
+               <img :src="imgSrc" />
             </div>
          </div>
          <CastomInput v-model="valueUrl" class="card__input-box" name="url" type="url" label="URL:" placeholder="URL" />
@@ -15,48 +15,28 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted } from "vue";
+import { ref, watch } from "vue";
 import CastomInput from '../components/CastomInput.vue';
 import ClosingCard from "./ClosingCard.vue";
 
 const props = defineProps({
    id: String,
+   img: File,
    ratio: String,
-   src: String,
-   text: String,
-   url: String,
-   fullPath: String,
 })
 
 const emit = defineEmits(['updatUrl', 'updateText', 'close']);
+const imgSrc = URL.createObjectURL(props.img)
 const valueUrl = ref('')
-watch(valueUrl, (newValue) => {
-   if (newValue != props.url) {
-      emit('updatUrl', props.id, newValue)
-   }
-})
-function addUrlInInput() {
-   if (props.url) {
-      valueUrl.value = props.url
-   }
-}
-
 const valueText = ref('')
-watch(valueText, (newValue) => {
-   if (newValue != props.text) {
-      emit('updateText', props.id, newValue)
-   }
+watch(valueUrl, (newValue) => {
+   emit('updatUrl', props.id, newValue)
 })
-function addTextInInput() {
-   if (props.text) {
-      valueText.value = props.text
-   }
-}
 
-onMounted(() => {
-   addUrlInInput();
-   addTextInInput();
+watch(valueText, (newValue) => {
+   emit('updateText', props.id, newValue)
 })
+
 </script>
 
 <style lang="scss" scoped>

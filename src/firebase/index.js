@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
 //import { getAnalytics } from "firebase/analytics";
-import { getFirestore, doc, setDoc } from "firebase/firestore";
-import { getStorage, ref, uploadString, getDownloadURL, getMetadata } from "firebase/storage";
+import { getFirestore, doc, setDoc, getDocs, collection, deleteDoc } from "firebase/firestore";
+import { getStorage, ref, uploadString, getDownloadURL, getMetadata, deleteObject } from "firebase/storage";
 
 import { getOrigId } from "../helpers/dataHandler.js";
 
@@ -31,15 +31,11 @@ const saveFile = async (fullPath, file) => {
    }
 }
 
-//function getOrigId() {
-//   return Date.now() + Math.random().toString(36).substring(10);
-//}
-
 const uploadFile = async (file) => {
    return await new Promise(function (resolve, reject) {
       let reader = new FileReader();
       reader.readAsDataURL(file);
-      reader.onload = async (e) => {
+      reader.onload = async () => {
          const result = reader.result;
          const { downloadUrl, metadata, snapshort } = await saveFile('imgage/banners/' + getOrigId() + file.name, result)
          if (snapshort) {
@@ -50,8 +46,6 @@ const uploadFile = async (file) => {
       }
    })
 }
-
-
 /**
 * Створює документ або додає/об'єднує дані до/в нього/ньому
 * @param id - унікальний ідентифікатор або назва документа.
@@ -60,9 +54,10 @@ const uploadFile = async (file) => {
 * @param collectionName - назва колекції, куди додаються дані.
 * @param isMerge - значення параметра isMerge метода setDoc.
 */
-async function addDataToFirebase(id, collectionName, name, value, isMerge) {
+async function addDataToFirebase(id, collectionName, name, value, isMerge,) {
+   console.log(value);
    await setDoc(doc(db, collectionName, id), {
-      [name]: value
+      [name]: value,
    }, { merge: isMerge })
 }
 
@@ -74,21 +69,57 @@ async function addDataToFirebase(id, collectionName, name, value, isMerge) {
 * @param arreyForUpload - масив з файлом для збереження.
 * @param collectionName - назва колекції, куди додаються дані.
 */
-async function saveNewData(arreyForUpload, collectionName) {
+async function saveNewData(arreyForUpload, collectionName, arrForDell) {
    console.log(arreyForUpload);
    for await (const item of arreyForUpload) {
-      const { downloadUrl, metadata, snapshort } = await uploadFile(item.image);
-      addDataToFirebase(item.id, collectionName, 'downloadUrl', downloadUrl, false);
-      console.log(downloadUrl);
+      if (item.image) {
+         const { downloadUrl, metadata } = await uploadFile(item.image);
+         await addDataToFirebase(item.id, collectionName, 'downloadUrl', downloadUrl, false);
+         await addDataToFirebase(item.id, collectionName, 'fullPath', metadata.fullPath, true);
+      }
       for (const key in item) {
          if (Object.hasOwnProperty.call(item, key)) {
-            if (key != "id" & key != "image") {
-               addDataToFirebase(item.id, collectionName, key, item[key], true)
+            if (key != "image") {
+               await addDataToFirebase(item.id, collectionName, key, item[key], true)
             }
-
          }
       }
    }
+   arreyForUpload.splice(0, arreyForUpload.length);
+   for await (const item of arrForDell) {
+      await delCardInDoc(collectionName, item.nameColl, item.fullPath)
+   }
+   arrForDell.splice(0, arrForDell.length);
+}
+/**
+* Завантажує дані з клекції 'collectionName'firebase, та
+* зберігає їх в масив 'arreyForSave'
+* @param arreyForSave - масив для збереження даниз.
+* @param collectionName - назва колекції, з якої зкачуються дані.
+*/
+//async function getOllDoc(collectionName, arreyForSave) {
+//   const querySnapshot = await getDocs(collection(db, collectionName));
+//   querySnapshot.forEach((doc) => {
+//      arreyForSave.push(doc.data())
+//   })
+//}
+
+async function delStorageFile(fullPath) {
+   // Create a reference to the file to delete
+   const desertRef = ref(storage, fullPath);
+
+   // Delete the file
+   deleteObject(desertRef)
+      .then(() => {
+         console.log('File deleted successfully');
+      }).catch(() => {
+         console.log('Uh-oh, an error occurred!');
+      });
 }
 
-export { db, uploadFile, saveNewData, addDataToFirebase }
+async function delCardInDoc(coll, nameDoc, fullPath) {
+   console.log(fullPath);
+   await delStorageFile(fullPath);
+   await deleteDoc(doc(db, coll, nameDoc));
+}
+export { db, uploadFile, saveNewData, addDataToFirebase, delCardInDoc }

@@ -8,9 +8,6 @@
          <option v-for="option in options" :value="option.value" :key="option.value">
             {{ option.text }}
          </option>
-         <!--<option value="5" selected>5</option>
-         <option value="10">10</option>
-         <option value="15">15</option>-->
       </select>
    </div>
 </template>
@@ -19,11 +16,10 @@
 import { ref, onMounted } from "vue";
 const props = defineProps(['modelValue', 'selectText', 'selectValue'])
 defineEmits(['update:modelValue'])
+
 const options = ref([
 ])
-//function addOptions(params) {
 
-//}
 function getOptions() {
    const valueText = props.selectValue !== undefined ? props.selectValue : props.selectText;
    for (let i = 0; i < props.selectText.length; i++) {
