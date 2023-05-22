@@ -11,9 +11,23 @@
 </template>
  
 <script setup lang="ts">
-import { toRef } from 'vue';
+import { toRef, onMounted } from 'vue';
 import { useField } from 'vee-validate';
+import * as yup from 'yup';
 
+//const phoneRegExp = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
+const shema = {
+   text: yup.string(),
+   url: yup.string().url(),
+   //yup.object({
+   //   'text': yup.string(),
+   //   //'lastName': yup.string().required("Value is required"),
+   //   //'email': yup.string().email(),
+   //   //'phone': yup.string().required("Phone number is required").matches(phoneRegExp, 'Phone number is not valid').min(10, "Phone number must contain 10 characters").max(10, "Phone number must contain 10 characters"),
+
+   //})
+}
+onMounted(() => console.log(name.value))
 const props = defineProps({
    type: {
       type: String,
@@ -49,7 +63,7 @@ const {
    handleBlur,
    handleChange,
    meta,
-} = useField(name, undefined, {
+} = useField(name, shema[name.value], {
    initialValue: props.modelValue,
 });
 </script>
@@ -84,10 +98,12 @@ input:focus {
 
 .help-message {
    position: absolute;
+   /*top: 5px;*/
    bottom: calc(-1.5 * 1em);
    left: 0;
    margin: 0;
    font-size: 14px;
+   color: red;
 }
 
 .TextInput.has-error input {

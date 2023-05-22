@@ -7,9 +7,10 @@
                <img :src="props.src" />
             </div>
          </div>
-         <CastomInput v-model="valueUrl" class="card__input-box" name="url" type="url" label="URL:" placeholder="URL" />
-         <CastomInput v-model="valueText" class="card__input-box" name="text" type="text" label="Текст:"
-            placeholder="Текст" />
+         <CastomInput v-if="props.isUrl" v-model="valueUrl" class="card__input-box" name="url" type="url" label="URL:"
+            placeholder="URL" />
+         <CastomInput v-if="props.isText" v-model="valueText" class="card__input-box" name="text" type="text"
+            label="Текст:" placeholder="Текст" />
       </div>
    </div>
 </template>
@@ -26,6 +27,14 @@ const props = defineProps({
    text: String,
    url: String,
    fullPath: String,
+   isText: {
+      type: Boolean,
+      default: true
+   },
+   isUrl: {
+      type: Boolean,
+      default: true
+   },
 })
 
 const emit = defineEmits(['updatUrl', 'updateText', 'close']);

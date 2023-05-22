@@ -23,13 +23,13 @@
                </div>
                <div class="through-banner__adding-section">
                   <div class="through-banner__photo-box" v-if="whichThroughBanner == 'img'">
-                     <div class="through-banner__img-box">
+                     <div v-if="srcImg" class="through-banner__img-box">
                         <div class="through-banner__img">
                            <img :src="srcImg" />
                         </div>
                      </div>
                      <FileUpload class="through-banner__upload" :multiple="false" @uploadedFiles="handleFileUpload" />
-                     <CastomButton class="through-banner__del-photo-btn" @click="click">
+                     <CastomButton v-if="srcImg" class="through-banner__del-photo-btn" @click="deleteImg">
                         Видалити
                      </CastomButton>
                   </div>
@@ -38,12 +38,6 @@
                         <label for="colorWell">Color:</label>
                         <input type="color" v-model="selectingColor">
                      </div>
-                     <!--<CastomButton class="through-banner__select-color-btn">
-                        Вибрати колір
-                     </CastomButton>
-                     <CastomButton class="through-banner__del-color-btn">
-                        Видалити
-                     </CastomButton>-->
                   </div>
                </div>
             </div>
@@ -51,15 +45,8 @@
          <template #footer>
             <CastomButton class="through-banner__saving-button" @click="saveChange" :disabled="isDisabledBtnSave"
                :loading="loading">
-               <!--<div class="through-banner__saving-button" @click="saveChange">-->
                <span>Зберегти</span>
-               <!--</div>-->
             </CastomButton>
-            <!--<div class="through-banner__saving-button-box">
-               <div class="through-banner__saving-button" @click="saveChange">
-                  <span>Зберегти</span>
-               </div>
-            </div>-->
          </template>
       </GeneralCard>
    </div>
@@ -67,22 +54,37 @@
 
 <script setup>
 import { ref, onMounted, watch, computed } from "vue";
-import { collection, addDoc, doc, setDoc, updateDoc, getDoc, getDocs, query, where } from "firebase/firestore";
+import { collection, doc, setDoc, updateDoc, getDocs, deleteField } from "firebase/firestore";
 import GeneralCard from '@/components/GeneralCard.vue';
 import CastomButton from "../CastomButton.vue";
-import ToggleCheckbox from '@/components/ToggleCheckbox.vue';
-import ImageCard from '@/components/ImageCard.vue';
-import CastomSelect from '@/components/CastomSelect.vue';
 import FileUpload from "@/components/FileUpload.vue";
-import { db, uploadFile, saveNewData, addDataToFirebase } from '@/firebase/index.js';
-import { getOrigId, updatObjectValue, delCard } from "@/helpers/dataHandler.js";
+import { db, uploadFile, delStorageFile } from '@/firebase/index.js';
+import { useUploadModalStore } from "@/stores/uploadModal.js";
+
+const emit = defineEmits(['goingLoading'])
+const loading = ref(false)
+watch(loading, (newValue) => {
+   console.log(newValue);
+   emit('goingLoading', newValue)
+})
+
+const uploadModal = useUploadModalStore();
+
+const props = defineProps({
+   name: {
+      type: String,
+      required: true
+   }
+})
 
 onMounted(() => {
    getOllDoc()
 })
 
-function click() {
-   console.log('Click')
+function deleteImg() {
+   srcImg.value = null;
+   uploadingFile.value = null
+   //delStorageFile(downloadData.value.fullPath)
 }
 
 const whichThroughBanner = ref('')
@@ -92,13 +94,19 @@ const selectingColor = ref(null)
 const dataForUpload = ref({})
 
 const isDisabledBtnSave = computed(() => {
-   console.log(dataForUpload.value)
-   return Object.keys(dataForUpload.value).length > 0 ? false : true
+   if (Object.keys(dataForUpload.value).length > 0) {
+      return false
+   } else if (uploadingFile.value) {
+      return false
+   } else if (isDelImg.value) {
+      return false
+   } else {
+      return true
+   }
 })
 
-const loading = ref(false);
-let downloadData;
-let querySnapshot; //?Чому виyіс за межі функції???
+const downloadData = ref({});
+let querySnapshot; //?Чому виніс за межі функції???
 /**
 * Завантажує дані з клекції 'collectionName'firebase, та
 * зберігає їх в масив 'arreyForSave'
@@ -107,47 +115,50 @@ let querySnapshot; //?Чому виyіс за межі функції???
 */
 async function getOllDoc() {
    try {
-      querySnapshot = await getDocs(collection(db, 'Through banner'))
+      querySnapshot = await getDocs(collection(db, props.name))
       if (!querySnapshot.empty) {
          querySnapshot.forEach((doc) => {
-            downloadData = doc.data()
+            downloadData.value = doc.data()
             if (doc.data().downloadUrl) {
                srcImg.value = doc.data().downloadUrl;
             }
             if (doc.data().whichBanner) {
                whichThroughBanner.value = doc.data().whichBanner
-               console.log(whichThroughBanner.value);
             }
             if (doc.data().selectingColor) {
                selectingColor.value = doc.data().selectingColor
-               console.log(selectingColor.value);
             }
          })
       }
-      console.log(downloadData);
    } catch (error) {
       console.log(error)
    }
 }
+const isDelImg = ref(null);
+watch(srcImg, (newValue, oldValue) => {
+   if (newValue == null && newValue != oldValue) {
+      isDelImg.value = true
+   }
+})
 
 watch(whichThroughBanner, (newValue) => {
-   if (downloadData.whichBanner != newValue) {
+   if (downloadData.value.whichBanner != newValue) {
       dataForUpload.value.whichBanner = newValue
-   } else if (dataForUpload.value.whichBanner && downloadData.whichBanner == newValue) {
+   } else if (dataForUpload.value.whichBanner && downloadData.value.whichBanner == newValue) {
       delete dataForUpload.value.whichBanner
    }
 })
 
 watch(selectingColor, (newValue) => {
-   if (downloadData.selectingColor != newValue) {
+   if (downloadData.value.selectingColor != newValue) {
       dataForUpload.value.selectingColor = newValue
-   } else if (dataForUpload.value.selectingColor && downloadData.selectingColor == newValue) {
+   } else if (dataForUpload.value.selectingColor && downloadData.value.selectingColor == newValue) {
       delete dataForUpload.value.selectingColor
    }
 })
 
 /**
-* Додає файли до масиву 'dataForUpload'
+* Додає файли до  'uploadingFile'
 */
 function handleFileUpload(files) {
    for (const file of files) {
@@ -157,21 +168,72 @@ function handleFileUpload(files) {
 }
 
 async function saveChange() {
-   loading.value = true
    try {
-      if (uploadingFile.value) {
-         console.log(uploadingFile.value);
-         const { downloadUrl, metadata } = await uploadFile(uploadingFile.value);
-         dataForUpload.value.downloadUrl = downloadUrl;
-         dataForUpload.value.fullPath = metadata.fullPath;
-      }
-      await setDoc(doc(db, 'Through banner', 'main'),
-         dataForUpload.value
-         , { merge: true })
+      new Promise((resolve, reject) => {
+         loading.value = true
+         if (uploadingFile.value == null && isDelImg.value) {
+            delStorageFile(downloadData.value.fullPath)
+               .then(() => {
+                  const cityRef = doc(db, props.name, 'main');
+                  updateDoc(cityRef, {
+                     fullPath: deleteField(),
+                     downloadUrl: deleteField(),
+                  })
+               })
+               .then(() => {
+                  delete downloadData.value.fullPath;
+                  delete downloadData.value.downloadUrl;
+                  console.log(downloadData.value);
+                  isDelImg.value = null;
+                  resolve()
+               })
+               .catch((e) => {
+                  console.log(e);
+                  reject()
+               })
+         } else if (uploadingFile.value) {
+            uploadFile(uploadingFile.value, 'banners/' + props.name + '/')
+               .then((response) => {
+                  if (downloadData.value.fullPath) {
+                     delStorageFile(downloadData.value.fullPath)
+                  }
+                  return response
+               },
+                  (e) => console.log(e))
+               .then((response) => {
+                  dataForUpload.value.downloadUrl = response.downloadUrl;
+                  dataForUpload.value.fullPath = response.metadata.fullPath;
+                  resolve()
+               },
+                  (e) => console.log(e))
+               .catch((e) => {
+                  console.log(e)
+                  reject()
+               })
+         } else {
+            resolve()
+            reject()
+         }
+      })
+         .then(() => {
+            if (Object.keys(dataForUpload.value).length) {
+               setDoc(doc(db, props.name, 'main'),
+                  dataForUpload.value
+                  , { merge: true });
+               uploadingFile.value = null;
+               Object.keys(dataForUpload.value).forEach(key => {
+                  downloadData.value[key] = dataForUpload.value[key];
+                  delete dataForUpload.value[key]
+               });
+            }
+            loading.value = false;
+            uploadModal.addMessage('Наскрізний банер на задньому фоні', false)
+         })
    } catch (error) {
-      console.log(error);
+      loading.value = false
+      uploadModal.addMessage(props.name, true)
+      console.log('Наскрізний банер на задньому фоні' + error);
    }
-   loading.value = false
 }
 
 </script>

@@ -1,7 +1,7 @@
 <template>
    <div class="modal">
       <div class="modal__box">
-         <h1>ЗАВНТАЖЕННЯ</h1>
+         <h1>ЗАЧЕКАЙТЕ, <br />ІДЕ ЗАВАНТАЖЕННЯ</h1>
       </div>
    </div>
 </template>
@@ -25,6 +25,7 @@
 
    &__box {
       color: white;
+      text-align: center;
       //position: relative;
       //max-width: 867px;
       //width: 100%;

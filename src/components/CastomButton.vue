@@ -1,5 +1,5 @@
 <template>
-   <button class="button" :disabled="props.disabled" ref="button" :style="{ width: widthBtn }">
+   <button class="button" :disabled="disabledBtn" ref="button" :style="{ width: widthBtn, cursor: cursorView }">
       <div v-if="!props.loading" class="button__text">
          <slot></slot>
       </div>
@@ -10,7 +10,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 const props = defineProps({
    disabled: {
       type: Boolean,
@@ -21,12 +21,22 @@ const props = defineProps({
       default: false
    }
 })
+
+const disabledBtn = computed(() => props.loading ? true : props.disabled)
 let widthBtn;
 const button = ref(null)
 function howWidthBtn() {
    widthBtn = getComputedStyle(button.value).width
-   console.log(widthBtn);
 }
+const cursorView = computed(() => {
+   if (props.loading) {
+      return 'wait'
+   } else if (props.disabled) {
+      return 'no-drop'
+   } else {
+      return 'pointer'
+   }
+})
 onMounted(() => {
    howWidthBtn()
 })
@@ -35,7 +45,6 @@ onMounted(() => {
 <style lang="scss" scoped>
 .button {
    width: max-content;
-   //width: 250px;
    height: 40px;
    background: #007bff;
    border-radius: 3px;
@@ -59,6 +68,7 @@ onMounted(() => {
 
    &__loading {
       height: 100%;
+      cursor: default;
 
       img {
          height: 100%;
