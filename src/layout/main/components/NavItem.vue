@@ -1,7 +1,14 @@
 <template>
    <li class="nav-item">
-      <RouterLink :to="link" class="nav-link" :class="{ active: isActive() }">
-         <i class="nav-icon " :class="icon"></i>
+      <RouterLink
+         :to="link"
+         class="nav-link"
+         :class="{ active: isActive() }"
+      >
+         <i
+            class="nav-icon"
+            :class="icon"
+         ></i>
          <p>
             <slot />
          </p>
@@ -10,7 +17,7 @@
 </template>
 
 <script setup>
-import { RouterLink, useRoute } from 'vue-router';
+import { RouterLink, useRoute } from 'vue-router'
 
 const props = defineProps({
    icon: {
@@ -21,7 +28,7 @@ const props = defineProps({
       type: String,
       default: null
    }
-});
+})
 
 const route = useRoute()
 function isActive() {

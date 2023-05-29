@@ -4,22 +4,46 @@
          {{ props.nameBanners }}
       </template>
       <template #label>
-         <ToggleCheckbox :value="showingBlock" @inputValue="changeShowingBlock" />
+         <ToggleCheckbox
+            :value="showingBlock"
+            @inputValue="changeShowingBlock"
+         />
       </template>
       <template #body>
          <div class="banner__main-block">
-            <ImageCard v-for="item in dataForShow" :key="item.id" :id="item.id" :src="item.downloadUrl" :url="item.url"
-               :fullPath="item.fullPath" :text="item.text" ratio="19%" @updatUrl="updatUrl" @updateText="updateText"
-               @close="delImgCard">
+            <ImageCard
+               v-for="item in dataForShow"
+               :key="item.id"
+               :id="item.id"
+               :src="item.downloadUrl"
+               :url="item.url"
+               :fullPath="item.fullPath"
+               :text="item.text"
+               ratio="19%"
+               @updatUrl="updatUrl"
+               @updateText="updateText"
+               @close="delImgCard"
+            >
             </ImageCard>
-            <FileUpload :multiple="true" @uploadedFiles="handleFileUpload" />
+            <FileUpload
+               :multiple="true"
+               @uploadedFiles="handleFileUpload"
+            />
          </div>
       </template>
       <template #footer>
-         <CastomSelect v-model="sliderSpeed" :selectText="topSelectText">
+         <CastomSelect
+            v-model="sliderSpeed"
+            :selectText="topSelectText"
+         >
             Швидкість зміни слайдів
          </CastomSelect>
-         <CastomButton class="banner__saving-button" @click="saveChange" :disabled="isDisabledBtnSave" :loading="loading">
+         <CastomButton
+            class="banner__saving-button"
+            @click="saveChange"
+            :disabled="isDisabledBtnSave"
+            :loading="loading"
+         >
             <span>Зберегти</span>
          </CastomButton>
       </template>
@@ -27,21 +51,21 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, watch } from "vue";
-import { collection, getDocs, } from "firebase/firestore";
-import { db, saveNewData, addDataToFirebase } from '@/firebase/index.js';
-import { getOrigId, updatObjectValue, delCard } from "@/helpers/dataHandler.js";
-import GeneralCard from '@/components/GeneralCard.vue';
-import ToggleCheckbox from '@/components/ToggleCheckbox.vue';
-import ImageCard from '@/components/ImageCard.vue';
-import CastomSelect from '@/components/CastomSelect.vue';
-import FileUpload from "@/components/FileUpload.vue";
-import CastomButton from "@/components/CastomButton.vue";
-import { useUploadModalStore } from "@/stores/uploadModal.js";
+import { ref, onMounted, computed, watch } from 'vue'
+import { collection, getDocs } from 'firebase/firestore'
+import { db, saveNewData, addDataToFirebase } from '@/firebase/index.js'
+import { getOrigId, updatObjectValue, delCard } from '@/helpers/dataHandler.js'
+import GeneralCard from '@/components/GeneralCard.vue'
+import ToggleCheckbox from '@/components/ToggleCheckbox.vue'
+import ImageCard from '@/components/ImageCard.vue'
+import CastomSelect from '@/components/CastomSelect.vue'
+import FileUpload from '@/components/FileUpload.vue'
+import CastomButton from '@/components/CastomButton.vue'
+import { useUploadModalStore } from '@/stores/uploadModal.js'
 
 const emit = defineEmits(['goingLoading'])
 
-const uploadModal = useUploadModalStore();
+const uploadModal = useUploadModalStore()
 
 const props = defineProps({
    name: {
@@ -60,7 +84,9 @@ const props = defineProps({
 
 const showingBlock = ref(true)
 const downloadedShowingBlock = ref(true)
-const isChangingShowingBlock = computed(() => showingBlock.value == downloadedShowingBlock.value ? false : true)
+const isChangingShowingBlock = computed(() =>
+   showingBlock.value == downloadedShowingBlock.value ? false : true
+)
 
 const loading = ref(false)
 watch(loading, (newValue) => {
@@ -70,24 +96,23 @@ onMounted(() => {
    getOllDoc(props.name, dataForShow.value)
 })
 
-
 /**
-* Завантажує дані з клекції 'collectionName'firebase, та
-* зберігає їх в масив 'arreyForSave'
-* @param arreyForSave - масив для збереження даниз.
-* @param collectionName - назва колекції, з якої зкачуються дані.
-*/
+ * Завантажує дані з клекції 'collectionName'firebase, та
+ * зберігає їх в масив 'arreyForSave'
+ * @param arreyForSave - масив для збереження даниз.
+ * @param collectionName - назва колекції, з якої зкачуються дані.
+ */
 async function getOllDoc(collectionName, arreyForSave) {
-   const querySnapshot = await getDocs(collection(db, collectionName));
+   const querySnapshot = await getDocs(collection(db, collectionName))
    querySnapshot.forEach((doc) => {
       if (doc.id != 'showingBlock' && doc.id != 'sliderSpeed') {
          arreyForSave.push(doc.data())
       } else if (doc.id == 'showingBlock') {
-         showingBlock.value = doc.data().show;
-         downloadedShowingBlock.value = doc.data().show;
+         showingBlock.value = doc.data().show
+         downloadedShowingBlock.value = doc.data().show
       } else if (doc.id == 'sliderSpeed') {
-         sliderSpeed.value = doc.data().speed;
-         downloadedSliderSpeed.value = doc.data().speed;
+         sliderSpeed.value = doc.data().speed
+         downloadedSliderSpeed.value = doc.data().speed
       }
    })
 }
@@ -95,54 +120,65 @@ async function getOllDoc(collectionName, arreyForSave) {
 async function saveChange() {
    try {
       new Promise((resolve, reject) => {
-         loading.value = true;
+         loading.value = true
          if (Object.keys(dataForUpload.value).length || Object.keys(dataForDel.value).length) {
             new Promise((resolve, reject) => {
-               saveNewData(dataForUpload.value, props.name, dataForDel.value, props.folderForSaveFile + '/' + props.name + '/', dataForShow.value)
-                  .then(() => {
-                     resolve();
-                     reject()
-                  })
-            })
-               .then(() => resolve(),
-                  () => reject()
-               )
+               saveNewData(
+                  dataForUpload.value,
+                  props.name,
+                  dataForDel.value,
+                  props.folderForSaveFile + '/' + props.name + '/',
+                  dataForShow.value
+               ).then(() => {
+                  resolve()
+                  reject()
+               })
+            }).then(
+               () => resolve(),
+               () => reject()
+            )
          } else {
-            resolve();
+            resolve()
             reject()
          }
-      }).catch((e) => console.log(e))
-         .then(() => {
-            if (isChangingShowingBlock.value) {
-               addDataToFirebase('showingBlock', props.name, 'show', showingBlock.value, false);
-               downloadedShowingBlock.value = showingBlock.value;
-            }
-         },
-            (e) => { console.log(e) }
-         )
-         .then(() => {
-            if (isChangingSliderSpeed.value) {
-               addDataToFirebase('sliderSpeed', props.name, 'speed', sliderSpeed.value, false);
-               downloadedSliderSpeed.value = sliderSpeed.value
-            }
-         },
+      })
+         .catch((e) => console.log(e))
+         .then(
+            () => {
+               if (isChangingShowingBlock.value) {
+                  addDataToFirebase('showingBlock', props.name, 'show', showingBlock.value, false)
+                  downloadedShowingBlock.value = showingBlock.value
+               }
+            },
             (e) => {
-               console.log(e);
+               console.log(e)
+            }
+         )
+         .then(
+            () => {
+               if (isChangingSliderSpeed.value) {
+                  addDataToFirebase('sliderSpeed', props.name, 'speed', sliderSpeed.value, false)
+                  downloadedSliderSpeed.value = sliderSpeed.value
+               }
+            },
+            (e) => {
+               console.log(e)
                uploadModal.addMessage(props.nameBanners, true, e)
             }
          )
-         .then(() => {
-            console.log('e')
-            loading.value = false
-            console.log(loading.value);
-            uploadModal.addMessage(props.nameBanners, false);
-         },
+         .then(
+            () => {
+               console.log('e')
+               loading.value = false
+               console.log(loading.value)
+               uploadModal.addMessage(props.nameBanners, false)
+            },
             (e) => console.log(e)
          )
    } catch (error) {
-      loading.value = false;
-      uploadModal.addMessage(props.nameBanners, true);
-      console.log(props.nameBanners + error);
+      loading.value = false
+      uploadModal.addMessage(props.nameBanners, true)
+      console.log(props.nameBanners + error)
    }
 }
 
@@ -155,26 +191,26 @@ function updateText(id, value) {
 }
 
 function changeShowingBlock(value) {
-   showingBlock.value = value;
+   showingBlock.value = value
 }
 
-const dataForUpload = ref([]);
-const dataForShow = ref([]);
+const dataForUpload = ref([])
+const dataForShow = ref([])
 /**
-* Додає файли до масиву 'dataForUpload'
-*/
+ * Додає файли до масиву 'dataForUpload'
+ */
 function handleFileUpload(files) {
    for (const item of files) {
       let id = getOrigId()
       let objItem = {
          id: id,
-         image: item,
+         image: item
       }
       let objItemForShow = {
          id: id,
-         downloadUrl: URL.createObjectURL(item),
+         downloadUrl: URL.createObjectURL(item)
       }
-      dataForUpload.value.push(objItem);
+      dataForUpload.value.push(objItem)
       dataForShow.value.push(objItemForShow)
       //console.log(dataForShow.value);
       //console.log(dataForUpload.value);
@@ -188,17 +224,17 @@ function delImgCard(id, fullPath) {
 
 const isDisabledBtnSave = computed(() => {
    if (Object.keys(dataForUpload.value).length > 0) {
-      console.log(1);
+      console.log(1)
       return false
    } else if (Object.keys(dataForDel.value).length) {
-      console.log(1);
+      console.log(1)
       return false
    } else if (isChangingShowingBlock.value) {
-      console.log(showingBlock.value);
-      console.log(downloadedShowingBlock.value);
+      console.log(showingBlock.value)
+      console.log(downloadedShowingBlock.value)
       return false
    } else if (isChangingSliderSpeed.value) {
-      console.log(1);
+      console.log(1)
       return false
    } else {
       return true
@@ -207,8 +243,9 @@ const isDisabledBtnSave = computed(() => {
 const topSelectText = [5, 10, 15]
 const sliderSpeed = ref('5')
 const downloadedSliderSpeed = ref('5')
-const isChangingSliderSpeed = computed(() => sliderSpeed.value == downloadedSliderSpeed.value ? false : true)
-
+const isChangingSliderSpeed = computed(() =>
+   sliderSpeed.value == downloadedSliderSpeed.value ? false : true
+)
 </script>
 
 <style lang="scss" scoped>

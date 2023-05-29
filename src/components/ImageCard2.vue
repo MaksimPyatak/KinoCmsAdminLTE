@@ -1,31 +1,47 @@
 <template>
    <div class="card">
       <div class="card__body">
-         <ClosingCard class="card__close" @click="$emit('close')" />
+         <ClosingCard
+            class="card__close"
+            @click="$emit('close')"
+         />
          <div class="card__img-box">
             <div class="card__img">
                <img :src="imgSrc" />
             </div>
          </div>
-         <CastomInput v-model="valueUrl" class="card__input-box" name="url" type="url" label="URL:" placeholder="URL" />
-         <CastomInput v-model="valueText" class="card__input-box" name="text" type="text" label="Текст:"
-            placeholder="Текст" />
+         <CastomInput
+            v-model="valueUrl"
+            class="card__input-box"
+            name="url"
+            type="url"
+            label="URL:"
+            placeholder="URL"
+         />
+         <CastomInput
+            v-model="valueText"
+            class="card__input-box"
+            name="text"
+            type="text"
+            label="Текст:"
+            placeholder="Текст"
+         />
       </div>
    </div>
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
-import CastomInput from '../components/CastomInput.vue';
-import ClosingCard from "./ClosingCard.vue";
+import { ref, watch } from 'vue'
+import CastomInput from '../components/CastomInput.vue'
+import ClosingCard from './ClosingCard.vue'
 
 const props = defineProps({
    id: String,
    img: File,
-   ratio: String,
+   ratio: String
 })
 
-const emit = defineEmits(['updatUrl', 'updateText', 'close']);
+const emit = defineEmits(['updatUrl', 'updateText', 'close'])
 const imgSrc = URL.createObjectURL(props.img)
 const valueUrl = ref('')
 const valueText = ref('')
@@ -36,7 +52,6 @@ watch(valueUrl, (newValue) => {
 watch(valueText, (newValue) => {
    emit('updateText', props.id, newValue)
 })
-
 </script>
 
 <style lang="scss" scoped>
@@ -49,7 +64,6 @@ watch(valueText, (newValue) => {
       position: absolute;
       top: -12px;
       right: -12px;
-
    }
 
    &__input-box {

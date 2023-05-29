@@ -1,5 +1,8 @@
 <template>
-   <div class="info-box" :class="modalColor">
+   <div
+      class="info-box"
+      :class="modalColor"
+   >
       <span class="info-box-icon"><i class="far fa-copy"></i></span>
       <div class="info-box-content">
          <span class="info-box-text">{{ props.componentsName }}</span>
@@ -9,10 +12,10 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { computed } from 'vue'
 const props = defineProps({
    componentsName: {
-      type: String,
+      type: String
    },
    isError: {
       type: Boolean,
@@ -31,8 +34,7 @@ const modalColor = computed(() => {
       return 'bg-success'
    }
 })
-const message = computed(() => props.isError ? props.error : 'Завантаження успішне')
-
+const message = computed(() => (props.isError ? props.error : 'Завантаження успішне'))
 </script>
 
 <style lang="scss" scoped></style>

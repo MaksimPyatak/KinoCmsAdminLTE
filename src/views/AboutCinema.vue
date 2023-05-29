@@ -1,11 +1,7 @@
 <template>
-   <div>
-      About-cinema
-   </div>
+   <div>About-cinema</div>
 </template>
 
-<script setup>
-
-</script>
+<script setup></script>
 
 <style lang="scss" scoped></style>

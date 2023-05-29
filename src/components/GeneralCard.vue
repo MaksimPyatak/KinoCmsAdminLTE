@@ -1,10 +1,10 @@
 <template>
    <div class="card card-primary">
-      <div class="card-header ">
+      <div class="card-header">
          <h3 class="card-title">
             <slot name="title"></slot>
          </h3>
-         <div class="card-tools ">
+         <div class="card-tools">
             <span class="badge badge-primary">
                <slot name="label"></slot>
             </span>
@@ -22,9 +22,7 @@
    <!-- /.card -->
 </template>
 
-<script setup>
-
-</script>
+<script setup></script>
 
 <style lang="scss" scoped>
 .card-title {

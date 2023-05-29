@@ -1,16 +1,31 @@
 <template>
-   <button class="button" :disabled="disabledBtn" ref="button" :style="{ width: widthBtn, cursor: cursorView }">
-      <div v-if="!props.loading" class="button__text">
+   <button
+      class="button"
+      :disabled="disabledBtn"
+      ref="button"
+      :style="{ width: widthBtn, cursor: cursorView }"
+      :type="props.type"
+   >
+      <div
+         v-if="!props.loading"
+         class="button__text"
+      >
          <slot></slot>
       </div>
-      <div v-else class="button__loading">
-         <img src="../assets/img/loading.gif" alt="">
+      <div
+         v-else
+         class="button__loading"
+      >
+         <img
+            src="../assets/img/loading.gif"
+            alt=""
+         />
       </div>
    </button>
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, computed } from 'vue'
 const props = defineProps({
    disabled: {
       type: Boolean,
@@ -19,11 +34,14 @@ const props = defineProps({
    loading: {
       type: Boolean,
       default: false
+   },
+   type: {
+      type: String
    }
 })
 
-const disabledBtn = computed(() => props.loading ? true : props.disabled)
-let widthBtn;
+const disabledBtn = computed(() => (props.loading ? true : props.disabled))
+let widthBtn
 const button = ref(null)
 function howWidthBtn() {
    widthBtn = getComputedStyle(button.value).width
@@ -59,7 +77,7 @@ onMounted(() => {
 
    &:hover {
       background: lighten(#007bff, 5%);
-      transition: all .3s;
+      transition: all 0.3s;
    }
 
    &__text {

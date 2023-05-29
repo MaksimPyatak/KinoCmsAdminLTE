@@ -1,19 +1,52 @@
 <template>
-   <button class="btn" type="button">
+   <button
+      class="btn"
+      type="button"
+   >
       <span class="btn__text">Submit</span>
-      <svg class="btn__progress" viewBox="0 0 48 48" width="48px" height="48px">
-         <circle class="btn__progress-track" r="20" cx="24" cy="24" fill="none" stroke="#c7cad1" stroke-width="8" />
-         <circle class="btn__progress-fill" r="20" cx="24" cy="24" fill="none" stroke="#000000" stroke-width="8"
-            transform="rotate(-90,24,24)" stroke-dasharray="125.66 125.66" stroke-dashoffset="125.66" />
-         <polyline class="btn__progress-check" points="12,24 20,32 36,16" fill="none" stroke="#fff" stroke-width="4"
-            stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="34 34" stroke-dashoffset="34" />
+      <svg
+         class="btn__progress"
+         viewBox="0 0 48 48"
+         width="48px"
+         height="48px"
+      >
+         <circle
+            class="btn__progress-track"
+            r="20"
+            cx="24"
+            cy="24"
+            fill="none"
+            stroke="#c7cad1"
+            stroke-width="8"
+         />
+         <circle
+            class="btn__progress-fill"
+            r="20"
+            cx="24"
+            cy="24"
+            fill="none"
+            stroke="#000000"
+            stroke-width="8"
+            transform="rotate(-90,24,24)"
+            stroke-dasharray="125.66 125.66"
+            stroke-dashoffset="125.66"
+         />
+         <polyline
+            class="btn__progress-check"
+            points="12,24 20,32 36,16"
+            fill="none"
+            stroke="#fff"
+            stroke-width="4"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-dasharray="34 34"
+            stroke-dashoffset="34"
+         />
       </svg>
    </button>
 </template>
 
-<script setup>
-
-</script>
+<script setup></script>
 
 <style lang="scss" scoped>
 * {
@@ -23,7 +56,8 @@
    padding: 0;
 }
 
-:root {}
+:root {
+}
 
 button {
    font: 1em/1.5 Nunito, sans-serif;
@@ -58,9 +92,7 @@ button {
    color: hsl(0, 0%, 100%);
    display: inline-block;
    padding: 0.75em 1.5em;
-   transition:
-      background-color 0.15s linear,
-      color 0.15s 0.3s ease-in-out;
+   transition: background-color 0.15s linear, color 0.15s 0.3s ease-in-out;
    width: 100%;
 }
 
@@ -109,9 +141,7 @@ button {
 .btn--running .btn__text,
 .btn--done .btn__text {
    color: transparent;
-   transition:
-      background-color 0.3s ease-in-out,
-      visibility 0.3s steps(1);
+   transition: background-color 0.3s ease-in-out, visibility 0.3s steps(1);
 }
 
 .btn--running .btn__progress,
@@ -132,9 +162,7 @@ button {
 .btn--running .btn__progress-track {
    r: 20px;
    stroke-width: 8;
-   transition:
-      r 0.3s 0.3s ease-in-out,
-      stroke-width 0.3s 0.3s ease-in-out;
+   transition: r 0.3s 0.3s ease-in-out, stroke-width 0.3s 0.3s ease-in-out;
 }
 
 .btn--running .btn__progress-fill {
@@ -145,9 +173,7 @@ button {
 /* Done state */
 .btn--done .btn__progress-track {
    stroke: var(--primary1);
-   transition:
-      r 0.3s ease-in-out,
-      stroke-width 0.3s ease-in-out;
+   transition: r 0.3s ease-in-out, stroke-width 0.3s ease-in-out;
 }
 
 .btn--done .btn__progress-check {

@@ -1,11 +1,22 @@
 <template>
    <div class="select">
-      <label for="select" class="select__label-select">
+      <label
+         for="select"
+         class="select__label-select"
+      >
          <slot></slot>
       </label>
-      <select class="select__body" name="select" :value="props.modelValue"
-         @input="$emit('update:modelValue', $event.target.value)">
-         <option v-for="option in options" :value="option.value" :key="option.value">
+      <select
+         class="select__body"
+         name="select"
+         :value="props.modelValue"
+         @input="$emit('update:modelValue', $event.target.value)"
+      >
+         <option
+            v-for="option in options"
+            :value="option.value"
+            :key="option.value"
+         >
             {{ option.text }}
          </option>
       </select>
@@ -13,21 +24,20 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted } from 'vue'
 const props = defineProps(['modelValue', 'selectText', 'selectValue'])
 defineEmits(['update:modelValue'])
 
-const options = ref([
-])
+const options = ref([])
 
 function getOptions() {
-   const valueText = props.selectValue !== undefined ? props.selectValue : props.selectText;
+   const valueText = props.selectValue !== undefined ? props.selectValue : props.selectText
    for (let i = 0; i < props.selectText.length; i++) {
-      options.value.push({ 'value': props.selectText[i], 'text': valueText[i] });
+      options.value.push({ value: props.selectText[i], text: valueText[i] })
    }
 }
 onMounted(() => {
-   getOptions();
+   getOptions()
 })
 </script>
 

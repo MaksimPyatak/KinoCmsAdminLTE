@@ -7,7 +7,7 @@ const router = createRouter({
       {
          path: '/',
          name: 'statistic',
-         component: StatisticPage,
+         component: StatisticPage
       },
       {
          path: '/about-cinema',
@@ -83,7 +83,7 @@ const router = createRouter({
          path: '/select-user',
          name: 'select-user',
          component: () => import('../views/SelectUsers.vue')
-      },
+      }
    ]
 })
 

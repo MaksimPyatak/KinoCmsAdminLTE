@@ -11,7 +11,6 @@ import MainLayout from './layout/main/MainLayout.vue'
 //   //console.log(Object.keys(uploadModal.messages).length);
 //   return Object.keys(uploadModal.messages).length
 //})
-
 </script>
 
 <template>

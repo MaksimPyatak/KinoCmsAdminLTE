@@ -6,9 +6,7 @@
    </div>
 </template>
 
-<script>
-</script>
-
+<script></script>
 
 <style lang="scss" scoped>
 .modal {

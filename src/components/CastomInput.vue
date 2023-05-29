@@ -1,24 +1,37 @@
 <template>
-   <div class="text-input" :class="{ 'has-error': !!errorMessage, success: meta.valid }">
+   <div
+      class="text-input"
+      :class="{ 'has-error': !!errorMessage, success: meta.valid }"
+   >
       <label :for="name">{{ label }}</label>
-      <input :name="name" :id="name" :type="type" :value="inputValue" :placeholder="placeholder" @input="handleChange"
-         @blur="handleBlur" />
+      <input
+         :name="name"
+         :id="name"
+         :type="type"
+         :value="inputValue"
+         :placeholder="placeholder"
+         @input="handleChange"
+         @blur="handleBlur"
+      />
 
-      <p class="help-message" v-show="errorMessage || meta.valid">
+      <p
+         class="help-message"
+         v-show="errorMessage || meta.valid"
+      >
          {{ errorMessage || successMessage }}
       </p>
    </div>
 </template>
- 
+
 <script setup lang="ts">
-import { toRef, onMounted } from 'vue';
-import { useField } from 'vee-validate';
-import * as yup from 'yup';
+import { toRef } from 'vue'
+import { useField } from 'vee-validate'
+import * as yup from 'yup'
 
 //const phoneRegExp = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
 const shema = {
    text: yup.string(),
-   url: yup.string().url(),
+   url: yup.string().url()
    //yup.object({
    //   'text': yup.string(),
    //   //'lastName': yup.string().required("Value is required"),
@@ -27,49 +40,68 @@ const shema = {
 
    //})
 }
-onMounted(() => console.log(name.value))
 const props = defineProps({
    type: {
       type: String,
-      default: 'text',
+      default: 'text'
    },
    modelValue: {
       type: String,
-      default: '',
+      default: ''
    },
    name: {
       type: String,
-      required: true,
+      required: true
    },
    label: {
       type: String,
-      required: true,
+      required: true
    },
    successMessage: {
       type: String,
-      default: '',
+      default: ''
    },
    placeholder: {
       type: String,
-      default: '',
-   },
-});
+      default: ''
+   }
+})
 
-const name = toRef(props, 'name');
+//v-on="validationListeners"
+//const validationListeners = computed(() => {
+//   // If the field is valid or have not been validated yet
+//   // lazy
+//   if (!errorMessage.value) {
+//      return {
+//         blur: handleChange,
+//         change: handleChange,
+//         // disable `shouldValidate` to avoid validating on input
+//         input: e => handleChange(e, false),
+//      };
+//   }
+//   // Aggressive
+//   return {
+//      blur: handleChange,
+//      change: handleChange,
+//      input: handleChange, // only switched this
+//   };
+//});
+
+const name = toRef(props, 'name')
 
 const {
    value: inputValue,
    errorMessage,
    handleBlur,
    handleChange,
-   meta,
+   meta
 } = useField(name, shema[name.value], {
-   initialValue: props.modelValue,
-});
+   initialValue: props.modelValue
+})
 </script>
 
 <style scoped>
-.TextInput {
+.text-input {
    position: relative;
    margin-bottom: calc(1em * 1.5);
    /*width: 100%;*/

@@ -1,24 +1,41 @@
 <template>
    <div class="card">
       <div class="card__body">
-         <ClosingCard class="card__close" @click="$emit('close', props.id, props.fullPath)" />
+         <ClosingCard
+            class="card__close"
+            @click="$emit('close', props.id, props.fullPath)"
+         />
          <div class="card__img-box">
             <div class="card__img">
                <img :src="props.src" />
             </div>
          </div>
-         <CastomInput v-if="props.isUrl" v-model="valueUrl" class="card__input-box" name="url" type="url" label="URL:"
-            placeholder="URL" />
-         <CastomInput v-if="props.isText" v-model="valueText" class="card__input-box" name="text" type="text"
-            label="Текст:" placeholder="Текст" />
+         <CastomInput
+            v-if="props.isUrl"
+            v-model="valueUrl"
+            class="card__input-box"
+            name="url"
+            type="url"
+            label="URL:"
+            placeholder="URL"
+         />
+         <CastomInput
+            v-if="props.isText"
+            v-model="valueText"
+            class="card__input-box"
+            name="text"
+            type="text"
+            label="Текст:"
+            placeholder="Текст"
+         />
       </div>
    </div>
 </template>
 
 <script setup>
-import { ref, watch, onMounted } from "vue";
-import CastomInput from '../components/CastomInput.vue';
-import ClosingCard from "./ClosingCard.vue";
+import { ref, watch, onMounted } from 'vue'
+import CastomInput from '../components/CastomInput.vue'
+import ClosingCard from './ClosingCard.vue'
 
 const props = defineProps({
    id: String,
@@ -34,10 +51,10 @@ const props = defineProps({
    isUrl: {
       type: Boolean,
       default: true
-   },
+   }
 })
 
-const emit = defineEmits(['updatUrl', 'updateText', 'close']);
+const emit = defineEmits(['updatUrl', 'updateText', 'close'])
 const valueUrl = ref('')
 watch(valueUrl, (newValue) => {
    if (newValue != props.url) {
@@ -63,14 +80,15 @@ function addTextInInput() {
 }
 
 onMounted(() => {
-   addUrlInInput();
-   addTextInInput();
+   addUrlInInput()
+   addTextInInput()
 })
 </script>
 
 <style lang="scss" scoped>
 .card {
    width: 250px;
+   margin-bottom: 25px;
    padding-bottom: 10px;
    position: relative;
 
@@ -78,7 +96,6 @@ onMounted(() => {
       position: absolute;
       top: -12px;
       right: -12px;
-
    }
 
    &__input-box {

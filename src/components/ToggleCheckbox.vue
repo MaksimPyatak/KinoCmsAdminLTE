@@ -1,21 +1,32 @@
 <template>
    <div>
-      <span class="toggle-wrapper" role="checkbox" :aria-checked="value.toString()" tabindex="0" @click="toggle"
-         @keydown.space.prevent="toggle">
-         <span class="toggle-background" :class="backgroundStyles" />
-         <span class="toggle-indicator" :style="indicatorStyles" />
+      <span
+         class="toggle-wrapper"
+         role="checkbox"
+         :aria-checked="value.toString()"
+         tabindex="0"
+         @click="toggle"
+         @keydown.space.prevent="toggle"
+      >
+         <span
+            class="toggle-background"
+            :class="backgroundStyles"
+         />
+         <span
+            class="toggle-indicator"
+            :style="indicatorStyles"
+         />
       </span>
    </div>
 </template>
 
 <script setup>
-import { computed } from 'vue';
-
+import { computed } from 'vue'
 
 const emit = defineEmits(['inputValue'])
 
 const props = defineProps({
-   value: Boolean,
+   value: Boolean
 })
 
 const backgroundStyles = computed(() => {
@@ -29,9 +40,8 @@ const indicatorStyles = computed(() => {
 })
 
 function toggle() {
-   emit('inputValue', !props.value);
+   emit('inputValue', !props.value)
 }
-
 </script>
 
 <style lang="scss" scoped>
@@ -62,7 +72,7 @@ function toggle() {
    height: 100%;
    width: 100%;
    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
-   transition: background-color .4s ease;
+   transition: background-color 0.4s ease;
 }
 
 .toggle-indicator {
@@ -74,6 +84,6 @@ function toggle() {
    background-color: #ffffff;
    border-radius: 9999px;
    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-   transition: transform .4s ease;
+   transition: transform 0.4s ease;
 }
 </style>

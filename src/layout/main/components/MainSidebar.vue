@@ -2,7 +2,10 @@
    <!-- Main Sidebar Container -->
    <aside class="main-sidebar sidebar-dark-primary elevation-4">
       <!-- Brand Logo -->
-      <a href="#" class="brand-link main-sidebar__logo-link">
+      <a
+         href="#"
+         class="brand-link main-sidebar__logo-link"
+      >
          <!--<img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
             style="opacity: .8">-->
          <span class="brand-text font-weight-light main-sidebar__logo">Kino CMS</span>
@@ -10,14 +13,18 @@
 
       <!-- Sidebar -->
       <div class="sidebar">
-
          <!-- Sidebar Menu -->
          <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column">
                <!--data-widget="treeview" role="menu"  -- прибрав за рекомендацією https://pagespeed.web.dev/-->
                <!-- Add icons to the links using the .nav-icon class
              with font-awesome or any other icon font library -->
-               <NavItem v-for="item in menuList" :icon="item.icon" :link="item.link" :key="item.id">
+               <NavItem
+                  v-for="item in menuList"
+                  :icon="item.icon"
+                  :link="item.link"
+                  :key="item.id"
+               >
                   {{ item.name }}
                </NavItem>
             </ul>
@@ -27,8 +34,8 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-import NavItem from './NavItem.vue';
+import { ref } from 'vue'
+import NavItem from './NavItem.vue'
 
 const menuList = ref([
    {
@@ -84,9 +91,8 @@ const menuList = ref([
       name: 'Розсилка',
       icon: 'fas fa-solid fa-envelope',
       link: '/mailing'
-   },
+   }
 ])
-
 </script>
 
 <style lang="scss" scoped>
@@ -104,6 +110,6 @@ const menuList = ref([
 }
 
 .fa-house:before {
-   content: "\f015";
+   content: '\f015';
 }
 </style>

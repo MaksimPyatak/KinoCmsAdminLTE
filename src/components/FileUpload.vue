@@ -1,23 +1,43 @@
 <template>
    <div class="file-upload">
       <label>
-         <input class="input-file" ref="file" v-on:change="handleFileUpload()" type="file" :multiple="props.multiple">
+         <input
+            name="file"
+            class="input-file"
+            ref="file"
+            v-on:change="handleFileUpload()"
+            type="file"
+            :multiple="props.multiple"
+         />
          <span>Додати файл</span>
       </label>
    </div>
 </template>
 
 <script setup>
-import { ref } from "vue"
+import { ref } from 'vue'
+//import { useField } from "vee-validate";
+//import * as Yup from 'yup';
 
 const file = ref(null)
 const props = defineProps({
-   multiple: Boolean,
+   multiple: Boolean
 })
 const emit = defineEmits(['uploadedFiles'])
 const handleFileUpload = async () => {
-   emit("uploadedFiles", file.value.files);
+   console.log(file.value.files)
+   emit('uploadedFiles', file.value.files)
 }
+//const schema = Yup.object().shape({
+//   file: Yup.mixed().required('File is required'),
+//})
+//const {
+//   value: inputValue,
+//   errorMessage,
+//   handleBlur,
+//   handleChange,
+//   meta,
+//} = useField('file', schema,);
 </script>
 
 <style lang="scss" scoped>
@@ -39,12 +59,12 @@ const handleFileUpload = async () => {
 
 .file-upload:hover {
    background: lighten(#007bff, 5%);
-   transition: all .3s;
+   transition: all 0.3s;
 }
 
-.file-upload input[type="file"] {
-   display: none
-      /* Обязательно скрываем настоящий Input File */
+.file-upload input[type='file'] {
+   display: none;
+   /* Обязательно скрываем настоящий Input File */
 }
 
 .file-upload label {
@@ -57,6 +77,6 @@ const handleFileUpload = async () => {
    width: 100%;
    height: 100%;
    padding: 10px;
-   cursor: pointer
+   cursor: pointer;
 }
 </style>

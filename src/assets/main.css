@@ -6,7 +6,7 @@
 @import 'admin-lte/dist/css/adminlte.min.css';
 
 #app {
-  /*max-width: 1280px;
+   /*max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
 
@@ -22,5 +22,4 @@ h3 {
    margin-left: 0;
    margin-right: 0;
    font-weight: bold;
-
 }
